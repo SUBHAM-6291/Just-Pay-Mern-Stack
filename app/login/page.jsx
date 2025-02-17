@@ -1,7 +1,17 @@
-"use client";
+'use client';
 import React from 'react';
+import { useSession,signIn } from 'next-auth/react';
 
 const login = () => {
+    const { data: session } = useSession();
+     if (session) {
+    return (
+      <div className="text-center text-white py-14">
+        <p>You are already logged in!</p>
+      </div>
+    );
+  }
+  
   return (
     <div className=" py-14 container mx-auto">
      <h1 className="text-centre text-white items-center justify-center flex font-bold text-3xl">login to get your fans support</h1>
@@ -95,7 +105,7 @@ const login = () => {
 </button>
 
 
-<button
+<button   onClick={() => {signIn("github")}}
     class="flex items-center bg-black border border-gray-300 rounded-lg shadow-md max-w-xs px-6 py-2 text-sm font-medium hover:text-black-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2hover:hover:text-black">
     <svg class="h-6 w-6 mr-2" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
         viewBox="0 0 73 73" version="1.1">
