@@ -7,6 +7,7 @@ const Page = () => {
   const [humanGifUrl, setHumanGifUrl] = useState('');
 
   useEffect(() => {
+
     const fetchGif = async () => {
       try {
         const response = await fetch('https://media0.giphy.com/media/HfnDSEIlqr2zbclDwk/giphy.webp');
@@ -28,11 +29,13 @@ const Page = () => {
   }, []);
 
   return (
+
     <div className="flex flex-col justify-center items-center text-white text-5xl min-h-screen space-y-8 px-4">
  
       <div className="py-4 bg-opacity-20 bg-gray-900 text-center text-lg font-semibold rounded-lg px-6 max-w-lg">
         Welcome to <span className="text-blue-400">JUST Pay</span> – The Future of Payments
       </div>
+      
 
 
       <div className="font-bold flex items-center space-x-3">

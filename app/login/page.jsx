@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { useSession,signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 const login = () => {
     const { data: session } = useSession();
@@ -11,7 +12,7 @@ const login = () => {
       </div>
     );
   }
-  
+
   return (
     <div className=" py-14 container mx-auto">
      <h1 className="text-centre text-white items-center justify-center flex font-bold text-3xl">login to get your fans support</h1>

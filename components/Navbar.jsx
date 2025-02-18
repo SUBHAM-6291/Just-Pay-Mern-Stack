@@ -1,53 +1,74 @@
 "use client";
-import React, { useState } from "react";
-import { useSession,  signOut } from "next-auth/react";
+import React, { useState, useEffect, useRef } from "react";
+import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 
 const Navbar = () => {
   const { data: session } = useSession();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  // Close dropdown if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <nav className="bg-black text-white flex items-center justify-between p-4 w-full">
       <div className="text-2xl font-mono">JUST PAY 💳</div>
 
-      <div className="flex gap-4">
+      <div className="flex gap-4 relative">
         {session ? (
           <>
             {/* Dropdown Button */}
             <button
-  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-  
-  className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
->
-  Welcome {session.user.name}
-  <svg className="w-3 h-3 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-    <path
-      stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="2"
-      d="M1 1l4 4 4-4"
-    />
-  </svg>
-</button>
-
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center"
+              aria-haspopup="true"
+              aria-expanded={isDropdownOpen}
+            >
+              Welcome {session.user.name}
+              <svg className="w-3 h-3 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M1 1l4 4 4-4"
+                />
+              </svg>
+            </button>
 
             {/* Dropdown Menu */}
             {isDropdownOpen && (
-              <div className="absolute right-10 top-14 bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-44 dark:bg-gray-700">
+              <div
+                ref={dropdownRef}
+                className="absolute right-0 mt-2 bg-white divide-y divide-gray-100 rounded-lg shadow-md w-44 dark:bg-gray-700"
+              >
                 <ul className="py-2 text-sm text-gray-700 dark:text-gray-200">
                   <li>
-                    <Link href={"/dashboard"} className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                    <Link
+                      href={"/dashboard"}
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
                       Dashboard
                     </Link>
                   </li>
                   <li>
-                    <Link href={"/page"} className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                    <Link
+                      href={`/page/${session.user.name.replace(" ", "_")}`}
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
                       Your page
                     </Link>
                   </li>
-                
                   <li>
                     <button
                       onClick={() => signOut()}
@@ -56,6 +77,15 @@ const Navbar = () => {
                       Sign Out
                     </button>
                   </li>
+                  <li>
+                    <Link
+                      href={"/"}
+                      className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >
+                      main page
+                    </Link>
+                  </li>
+                  
                 </ul>
               </div>
             )}

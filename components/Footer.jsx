@@ -8,12 +8,12 @@ const Footer = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("https://worldtimeapi.org/api/timezone/Etc/UTC");
+        const response = await fetch("http://api.timezonedb.com/v2.1/list-time-zone");
         const data = await response.json();
         setDate(new Date(data.utc_datetime).getFullYear());
       } catch (error) {
         console.error("Error fetching date:", error);
-        setDate("Error fetching date");
+        setDate("Error fetching date",);
       }
     };
     fetchData();
